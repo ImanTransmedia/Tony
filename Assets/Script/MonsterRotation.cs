@@ -5,6 +5,7 @@ public class MonsterRotation : MonoBehaviour
 {
     private float targetAngle;
     private float rotationTime;
+    private float sleepTime = 0.2f;
     [SerializeField]
     private float minRotation = 45f;
     [SerializeField]
@@ -48,7 +49,7 @@ public class MonsterRotation : MonoBehaviour
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, endAngle, transform.eulerAngles.z);
 
             // Esperar un momento antes de volver a la posición original
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(sleepTime);
 
             // Determinar si se debe tomar el camino más largo de regreso
             bool takeLongWay = Random.value > 0.5f;
@@ -101,7 +102,7 @@ public class MonsterRotation : MonoBehaviour
             rotatePositive = !rotatePositive;
 
             // Esperar antes de comenzar la siguiente rotación
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(sleepTime);
         }
     }
 }
