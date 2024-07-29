@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MonsterRotation : MonoBehaviour
@@ -17,10 +18,36 @@ public class MonsterRotation : MonoBehaviour
 
     private bool rotatePositive = true;
 
-    void Start()
+    private Coroutine rotationCoroutine;
+
+    void OnEnable()
     {
-        StartCoroutine(RotateObject());
+        transform.eulerAngles = new Vector3(-90, 180, 0);
+        StartRotationCoroutine();
     }
+
+    void OnDisable()
+    {
+        StopRotationCoroutine();
+    }
+
+    private void StartRotationCoroutine()
+    {
+        if (rotationCoroutine == null)
+        {
+            rotationCoroutine = StartCoroutine(RotateObject());
+        }
+    }
+
+    private void StopRotationCoroutine()
+    {
+        if (rotationCoroutine != null)
+        {
+            StopCoroutine(rotationCoroutine);
+            rotationCoroutine = null;
+        }
+    }
+
 
     IEnumerator RotateObject()
     {

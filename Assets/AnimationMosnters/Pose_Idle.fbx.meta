@@ -3,7 +3,12 @@ guid: e715f73019f1bc5409e3ab146f011298
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bax.007
+    second: {fileID: 2100000, guid: d4566d705f3a7e7489f67c9a1b956651, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
