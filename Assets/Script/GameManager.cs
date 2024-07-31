@@ -18,6 +18,12 @@ public class GameManager : MonoBehaviour
     GameObject monstruo;
 
     [SerializeField]
+    Animator animator;
+
+    [SerializeField]
+    Animator animatorTuto;
+
+    [SerializeField]
     GameObject menuFinal;
 
     [SerializeField]
@@ -27,7 +33,7 @@ public class GameManager : MonoBehaviour
     TextMeshProUGUI timeText;
 
     [SerializeField]
-    private float duration = 5f; // Tiempo inicial en segundos
+    private float duration = 10f; // Tiempo inicial en segundos
 
     [SerializeField]
     ScoreManager scoreManager;
@@ -41,30 +47,32 @@ public class GameManager : MonoBehaviour
     TextMeshProUGUI score;
 
     [SerializeField]
+    TextMeshProUGUI finalTime;
+
+    [SerializeField]
     Sprite win;
 
     [SerializeField]
     Sprite lost;
 
+    [SerializeField]
+    AudioSource loseAudio;
+
+    [SerializeField]
+    AudioSource winAudio;
+
+    [SerializeField]
+    GameObject label;
+
     private bool won;
     private float currentTime; // Tiempo inicial en segundos
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //scoreManager.SetHambre(hambre);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void StartCountdown()
     {
         monstruo.SetActive(true);
         currentTime = duration;
+        scoreManager.Reset();
         StartCoroutine(Countdown());
     }
 
@@ -83,24 +91,47 @@ public class GameManager : MonoBehaviour
 
         won = scoreManager.HasWon();
 
+      
+
         monstruo.SetActive(false);
 
         if (won)
+        {
             finalMessage.sprite = win;
+            monstruo.transform.eulerAngles = new Vector3(0, 0, 0);
+            winAudio.Play();
+            animator.Play("Monster_Animations|Festejo");
+            yield return new WaitForSeconds(2.5f);
+        }    
         else
+        {
             finalMessage.sprite = lost;
+        }
+
+        finalTime.text = currentTime.ToString("0");
 
         menuFinal.SetActive(true);
 
-        score.text = scoreManager.GetScore();
+        loseAudio.Play();
+    }
+
+    IEnumerator MonsterDance()
+    {
+        monstruo.transform.eulerAngles = new Vector3(0, 0, 0);
+        finalTime.text = currentTime.ToString("0");
+        winAudio.Play();
+        animator.Play("Monster_Animations|Festejo");
+        yield return new WaitForSeconds(2.5f);
+        monstruo.SetActive(false);
+        finalMessage.sprite = win;
+
+        menuFinal.SetActive(true);
     }
 
     public void EndGame()
     {
         StopAllCoroutines();
-        monstruo.SetActive(false);
-        finalMessage.sprite = win;
-        menuFinal.SetActive(true);
+        StartCoroutine(MonsterDance());
     }
 
     public void StartGame()
@@ -108,15 +139,13 @@ public class GameManager : MonoBehaviour
         scoreManagerTuto.setTutorialState(true, true);
         menuInicio.SetActive(false);
         tutorial.Play();
-        //currentTime = duration;
-        //monstruo.SetActive(true);
-        //scoreManager.Reset();
-        //StartCountdown();
     }
+
     public void Reiniciar()
     {
         tutorial.time = 0;
         tutorial.Play();
         menuFinal.SetActive(false);
+        label.SetActive(true);
     }
 }

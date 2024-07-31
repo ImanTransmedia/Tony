@@ -9,6 +9,9 @@ public class RespawnTrigger : MonoBehaviour
     [SerializeField]
     GameObject visual;
 
+    [SerializeField]
+    TutorialManager tutorialManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,7 +20,7 @@ public class RespawnTrigger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void MakeVisible()
@@ -26,5 +29,6 @@ public class RespawnTrigger : MonoBehaviour
         {
             visual.SetActive(true);
         }
+        tutorialManager.ActivateMessage();
     }
 }
