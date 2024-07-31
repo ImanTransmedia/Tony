@@ -15,14 +15,18 @@ public class ScoreManager : MonoBehaviour
     TutorialManager tutorialManager;
     [SerializeField]
     TextMeshProUGUI contador;
+    [SerializeField]
+    TextMeshProUGUI finalScore;
+
+    [SerializeField]
+    AudioSource audio;
 
     [SerializeField]
     GameObject particles;
 
     public GameManager gameManager;
 
-    private int hambre;
-    private int score;
+    private int score = 0;
 
     public bool isPlaying;
     public bool isTutorial;
@@ -38,23 +42,26 @@ public class ScoreManager : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        //if (isPlaying)
-        //{
+        if (isPlaying)
+        {
+            audio.Play();
             particles.SetActive(true);
             score++;
             contador.text = score.ToString();
+            finalScore.text = score.ToString();
             other.gameObject.SetActive(false);
 
             if (isTutorial)
             {
-                tutorialManager.SetAcierto(true);
-                gameManager.tutorial.Play();
+                tutorialManager.SetAcierto();
             }
-            //if(score == 10)
-            //{
-            //    gameManager.EndGame();
-            //}
-        //}
+
+            if(score == 10)
+            {
+                isPlaying = false;
+                gameManager.EndGame();
+            }
+        }
     }
 
     public bool HasWon()
@@ -67,7 +74,7 @@ public class ScoreManager : MonoBehaviour
     {
         score = 0;
         contador.text = "0";
-
+        finalScore.text = "0";
     }
 
     IEnumerator timeToStart()
@@ -81,19 +88,12 @@ public class ScoreManager : MonoBehaviour
         StartCoroutine(timeToStart());
     }
 
-    public void SetHambre(int hambre)
-    {
-        this.hambre = hambre;
-    }
-
-    public string GetScore()
-    {
-        return score.ToString("00");
-    }
 
     public void setTutorialState(bool isTutorial, bool isPlaying)
     {
         this.isTutorial = isTutorial;
         this.isPlaying = true;
     }
+
+
 }
